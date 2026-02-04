@@ -13,9 +13,9 @@ export default async function HomePage() {
       <Image
         src="/bpdc.jpg"
         alt="BPDC"
-        width={200}
-        height={80}
-        className="mx-auto h-16 w-auto object-contain sm:h-20"
+        width={280}
+        height={100}
+        className="mx-auto h-24 w-auto object-contain sm:h-32"
         priority
       />
       <h1 className="mt-8 text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl">

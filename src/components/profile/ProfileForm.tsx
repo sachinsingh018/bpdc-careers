@@ -62,6 +62,8 @@ export function ProfileForm({ profile }: ProfileFormProps) {
                         defaultValue={profile?.fullName}
                         placeholder="Jane Smith"
                         required
+                        minLength={2}
+                        maxLength={100}
                     />
                     <Input
                         label="Email"
@@ -70,6 +72,8 @@ export function ProfileForm({ profile }: ProfileFormProps) {
                         defaultValue={profile?.email}
                         placeholder="jane@university.edu"
                         required
+                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                        title="Enter a valid email address"
                     />
                 </div>
             </section>
@@ -85,20 +89,26 @@ export function ProfileForm({ profile }: ProfileFormProps) {
                     <Input
                         label="University"
                         name="university"
-                        defaultValue={profile?.university}
-                        placeholder="State University"
+                        defaultValue={profile?.university || "BITS Pilani, Dubai Campus"}
+                        placeholder="BITS Pilani, Dubai Campus"
                     />
                     <Input
                         label="Degree / Major"
                         name="degree"
                         defaultValue={profile?.degree}
                         placeholder="Computer Science, B.S."
+                        maxLength={120}
                     />
                     <Input
                         label="Graduation year"
                         name="graduationYear"
                         defaultValue={profile?.graduationYear}
                         placeholder="2025"
+                        minLength={4}
+                        maxLength={4}
+                        pattern="[0-9]{4}"
+                        title="Enter a 4-digit year (e.g. 2025)"
+                        inputMode="numeric"
                     />
                 </div>
             </section>
@@ -115,6 +125,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
                     name="skills"
                     defaultValue={profile?.skills.join(", ")}
                     placeholder="Product design, React, Figma, UX research"
+                    maxLength={500}
                 />
                 <p className="text-xs text-neutral-400">Separate skills with commas so we can feature them as tags.</p>
                 <Textarea
@@ -123,6 +134,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
                     defaultValue={profile?.bio}
                     placeholder="Share a quick summary of your background, focus areas, and what you want to work on next."
                     rows={4}
+                    maxLength={1000}
                 />
             </section>
 

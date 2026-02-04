@@ -32,9 +32,9 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
           <Image
             src="/bpdc.jpg"
             alt="BPDC"
-            width={100}
-            height={36}
-            className="h-8 w-auto max-w-[100px] object-contain sm:h-10 sm:max-w-[120px]"
+            width={140}
+            height={50}
+            className="h-10 w-auto max-w-[140px] object-contain sm:h-12 sm:max-w-[160px]"
             priority
           />
           <span className="hidden truncate text-base font-medium text-neutral-900 md:inline">Career Profile</span>

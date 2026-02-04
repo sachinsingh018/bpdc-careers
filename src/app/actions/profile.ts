@@ -35,6 +35,22 @@ export async function createOrUpdateProfile(
     return { error: "Full name and email are required" };
   }
 
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email)) {
+    return { error: "Please enter a valid email address" };
+  }
+
+  if (fullName.length < 2 || fullName.length > 100) {
+    return { error: "Full name must be between 2 and 100 characters" };
+  }
+
+  if (graduationYear) {
+    const year = parseInt(graduationYear, 10);
+    if (!/^\d{4}$/.test(graduationYear) || year < 2000 || year > 2050) {
+      return { error: "Graduation year must be a 4-digit year between 2000 and 2050" };
+    }
+  }
+
   const photoFile = formData.get("photo") as File | null;
   const resumeFile = formData.get("resume") as File | null;
 
