@@ -10,7 +10,7 @@ export function Watermark() {
       <img
         src="/bpdc.jpg"
         alt=""
-        className="h-auto w-auto max-h-[min(45vw,40vh)] max-w-[min(45vw,40vh)] opacity-[0.15] sm:max-h-[min(50vw,45vh)] sm:max-w-[min(50vw,45vh)]"
+        className="h-auto w-auto max-h-[min(45vw,40vh)] max-w-[min(45vw,40vh)] opacity-[0.40] sm:max-h-[min(50vw,45vh)] sm:max-w-[min(50vw,45vh)]"
       />
     </div>
   );
