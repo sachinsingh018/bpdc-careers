@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 
@@ -29,14 +28,7 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
           className="flex min-w-0 items-center gap-2"
           onClick={closeMobile}
         >
-          <Image
-            src="/bpdc.jpg"
-            alt="BPDC"
-            width={140}
-            height={50}
-            className="h-10 w-auto max-w-[140px] object-contain sm:h-12 sm:max-w-[160px]"
-            priority
-          />
+          <span className="text-xl font-bold text-neutral-900 sm:text-2xl">BPDC</span>
           <span className="hidden truncate text-base font-medium text-neutral-900 md:inline">Career Profile</span>
         </Link>
 

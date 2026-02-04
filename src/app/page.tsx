@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getAuthContext } from "@/lib/guards";
 import { Button } from "@/components/ui/Button";
@@ -10,14 +9,7 @@ export default async function HomePage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-16 text-center">
-      <Image
-        src="/bpdc.jpg"
-        alt="BPDC"
-        width={280}
-        height={100}
-        className="mx-auto h-24 w-auto object-contain sm:h-32"
-        priority
-      />
+      <p className="text-4xl font-bold text-neutral-900 sm:text-5xl">BPDC Career Profile</p>
       <h1 className="mt-8 text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl">
         Your Career Profile in One Scan
       </h1>

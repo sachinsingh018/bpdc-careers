@@ -38,13 +38,18 @@ export class ScanErrorBoundary extends Component<Props, State> {
       if (this.props.fallback) {
         return this.props.fallback;
       }
+      const err = this.state.error;
       return (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-6 text-center">
-          <p className="text-sm font-medium text-amber-800">Camera failed to start</p>
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-6">
+          <p className="text-sm font-medium text-amber-800">Something went wrong</p>
           <p className="mt-2 text-sm text-amber-700">
-            Try refreshing the page or use the manual link entry below. On mobile, ensure you&apos;re using HTTPS and
-            have allowed camera access.
+            {err?.message || "An unexpected error occurred."}
           </p>
+          {err?.stack && (
+            <pre className="mt-3 max-h-32 overflow-auto rounded bg-amber-100/80 p-2 text-xs text-amber-900">
+              {err.stack}
+            </pre>
+          )}
           <Button variant="secondary" className="mt-4" onClick={this.handleReset}>
             Try again
           </Button>
