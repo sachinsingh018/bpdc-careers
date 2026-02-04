@@ -1,13 +1,11 @@
 /**
- * Mock Profile Repository
- * File-backed storage so data survives dev server restarts
- * TODO: Replace with Amazon RDS implementation - use ProfileRepository interface
+ * Mock Profile Repository - in-memory only (used when DATABASE_URL is not set)
  */
 import type { Profile } from "@/lib/domain/profile";
 import type { ProfileRepository } from "@/lib/persistence/profile-repository";
-import { loadProfiles, saveProfiles } from "./mock-store";
 
-let { byId: profiles, byStudentId: profilesByStudentId } = loadProfiles();
+const profiles = new Map<string, Profile>();
+const profilesByStudentId = new Map<string, string>();
 
 export const mockProfileRepository: ProfileRepository = {
   async findById(id: string): Promise<Profile | null> {
@@ -20,12 +18,10 @@ export const mockProfileRepository: ProfileRepository = {
   async save(profile: Profile): Promise<Profile> {
     profiles.set(profile.id, profile);
     profilesByStudentId.set(profile.studentId, profile.id);
-    saveProfiles(profiles, profilesByStudentId);
     return profile;
   },
   async update(profile: Profile): Promise<Profile> {
     profiles.set(profile.id, profile);
-    saveProfiles(profiles, profilesByStudentId);
     return profile;
   },
 };

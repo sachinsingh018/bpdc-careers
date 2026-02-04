@@ -1,13 +1,10 @@
 /**
- * Mock User Repository
- * File-backed storage so data survives dev server restarts
- * TODO: Replace with Amazon RDS implementation - use UserRepository interface
+ * Mock User Repository - in-memory only (used when DATABASE_URL is not set)
  */
 import type { Student } from "@/lib/domain/student";
 import type { UserRepository } from "@/lib/persistence/user-repository";
-import { loadUsers, saveUsers } from "./mock-store";
 
-let users = loadUsers();
+const users = new Map<string, Student>();
 
 export const mockUserRepository: UserRepository = {
   async findByEmail(email: string): Promise<Student | null> {
@@ -18,7 +15,6 @@ export const mockUserRepository: UserRepository = {
   },
   async save(student: Student): Promise<Student> {
     users.set(student.id, student);
-    saveUsers(users);
     return student;
   },
 };
