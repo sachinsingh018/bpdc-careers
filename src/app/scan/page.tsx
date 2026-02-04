@@ -16,6 +16,7 @@ const DETECTION_DELAY = 900;
 export default function ScanPage() {
     const router = useRouter();
     const [started, setStarted] = useState(false);
+    const [preparing, setPreparing] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [pendingPath, setPendingPath] = useState<string | null>(null);
     const [statusMessage, setStatusMessage] = useState<string | null>(null);
@@ -62,27 +63,41 @@ export default function ScanPage() {
             <div className="mt-8 rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
                 {!started && !pendingPath ? (
                     <div className="flex flex-col gap-6 text-center">
-                        <div className="mx-auto h-24 w-24 rounded-full bg-neutral-100" />
-                        <div>
-                            <p className="text-base font-medium text-neutral-800">Ready when you are</p>
-                            <p className="mt-1 text-sm text-neutral-500">
-                                Turn on the camera to scan. We&apos;ll guide you if anything looks off.
-                            </p>
-                        </div>
-                        <div className="space-y-2 text-sm text-neutral-500">
-                            <p>• Hold the QR code steady in the frame</p>
-                            <p>• Allow camera access when prompted</p>
-                            <p>• Tap below if you prefer to paste a link</p>
-                        </div>
-                        <Button
-                            onClick={() => {
-                                setError(null);
-                                setStatusMessage(null);
-                                setStarted(true);
-                            }}
-                        >
-                            Start camera
-                        </Button>
+                        {preparing ? (
+                            <>
+                                <div className="mx-auto h-24 w-24 animate-pulse rounded-full bg-neutral-100" />
+                                <p className="text-base font-medium text-neutral-800">Preparing camera…</p>
+                                <p className="text-sm text-neutral-500">Please wait a moment</p>
+                            </>
+                        ) : (
+                            <>
+                                <div className="mx-auto h-24 w-24 rounded-full bg-neutral-100" />
+                                <div>
+                                    <p className="text-base font-medium text-neutral-800">Ready when you are</p>
+                                    <p className="mt-1 text-sm text-neutral-500">
+                                        Turn on the camera to scan. We&apos;ll guide you if anything looks off.
+                                    </p>
+                                </div>
+                                <div className="space-y-2 text-sm text-neutral-500">
+                                    <p>• Hold the QR code steady in the frame</p>
+                                    <p>• Allow camera access when prompted</p>
+                                    <p>• Tap below if you prefer to paste a link</p>
+                                </div>
+                                <Button
+                                    onClick={() => {
+                                        setError(null);
+                                        setStatusMessage(null);
+                                        setPreparing(true);
+                                        setTimeout(() => {
+                                            setPreparing(false);
+                                            setStarted(true);
+                                        }, 350);
+                                    }}
+                                >
+                                    Start camera
+                                </Button>
+                            </>
+                        )}
                     </div>
                 ) : null}
 

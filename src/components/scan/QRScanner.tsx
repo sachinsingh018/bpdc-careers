@@ -33,20 +33,19 @@ export function QRScanner({ onError, onStop, onDetected }: QRScannerProps) {
       return;
     }
 
-    try {
+    const qrboxSize = Math.min(280, Math.min(window.innerWidth - 32, window.innerHeight * 0.4));
+    const config = {
+      fps: 8,
+      qrbox: { width: qrboxSize, height: qrboxSize },
+      aspectRatio: 1,
+      disableFlip: false,
+    };
+
+    const tryStart = async (facingMode: "environment" | "user") => {
       const html5QrCode = new Html5Qrcode("qr-reader");
       scannerRef.current = html5QrCode;
-
-      const qrboxSize = Math.min(280, Math.min(window.innerWidth - 32, window.innerHeight * 0.4));
-      const config = {
-        fps: 8,
-        qrbox: { width: qrboxSize, height: qrboxSize },
-        aspectRatio: 1,
-        disableFlip: false,
-      };
-
       await html5QrCode.start(
-        { facingMode: "environment" },
+        { facingMode },
         config,
         async (decodedText) => {
           await stopScanning();
@@ -65,23 +64,53 @@ export function QRScanner({ onError, onStop, onDetected }: QRScannerProps) {
         () => { }
       );
       setIsStarting(false);
+    };
+
+    try {
+      await tryStart("environment");
     } catch (err) {
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const msg = err instanceof Error ? err.message : String(err);
+      const isUnknownOrQuery = /unknown error|unable to query|error getting/i.test(msg);
+      if (isMobile && isUnknownOrQuery) {
+        try {
+          if (scannerRef.current) {
+            await scannerRef.current.stop().catch(() => { });
+            scannerRef.current = null;
+          }
+          const el = document.getElementById("qr-reader");
+          if (el) {
+            el.innerHTML = "";
+          }
+          await tryStart("user");
+          return;
+        } catch {
+          // Fall through to error handling
+        }
+      }
+      const name = err instanceof Error ? (err as Error & { name?: string }).name : "";
       const message = err instanceof Error ? err.message : String(err);
-      if (message.includes("NotAllowedError") || message.includes("Permission")) {
+      const full = `${name} ${message}`.toLowerCase();
+
+      if (full.includes("notallowederror") || full.includes("permission") || full.includes("denied")) {
         onError?.("Camera access was denied. Please allow camera access in your browser settings and try again.");
-      } else if (message.includes("NotFoundError") || message.includes("not found")) {
+      } else if (full.includes("notfounderror") || full.includes("not found") || full.includes("no camera")) {
         onError?.("No camera found. Please use a device with a camera.");
-      } else if (message.includes("NotReadableError") || message.includes("in use")) {
+      } else if (full.includes("notreadableerror") || full.includes("in use")) {
         onError?.("Camera is in use by another app. Please close other apps using the camera.");
+      } else if (full.includes("unknown error") || full.includes("unable to query") || full.includes("secure context") || full.includes("https")) {
+        onError?.("Camera couldn't start. On mobile: use HTTPS, allow camera access, and try refreshing. Use \"Enter link manually\" below if it still fails.");
+      } else if (full.includes("getusermedia") || full.includes("error getting")) {
+        onError?.("Camera couldn't start. Please ensure you're on HTTPS, allow camera access when prompted, and try again.");
       } else {
-        onError?.("Could not access camera. Please ensure you're on HTTPS and allow camera access.");
+        onError?.("Camera couldn't start. On mobile: ensure you're on HTTPS and have allowed camera access. Use \"Enter link manually\" below if needed.");
       }
       setIsStarting(false);
     }
   }, [onDetected, onError, stopScanning]);
 
   useEffect(() => {
-    const timer = setTimeout(() => startScanning(), 100);
+    const timer = setTimeout(() => startScanning(), 400);
     return () => {
       clearTimeout(timer);
       if (scannerRef.current) {
