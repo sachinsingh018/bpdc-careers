@@ -43,7 +43,7 @@ export default function SignupPage() {
   return (
     <div className="mx-auto max-w-md px-4 py-12">
       <h1 className="text-2xl font-semibold text-neutral-900">Create account</h1>
-      <p className="mt-2 text-neutral-600">
+      <p className="mt-2 text-neutral-900">
         Enter your email to get started. You&apos;ll go straight to your profile setup.
       </p>
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -61,13 +61,13 @@ export default function SignupPage() {
           autoComplete="email"
         />
         <Button type="submit" fullWidth isLoading={pending} loadingText="Creating account…">
-          Sign up
+          Create account
         </Button>
       </form>
-      <p className="mt-6 text-center text-sm text-neutral-600">
+      <p className="mt-6 text-center text-sm text-neutral-900">
         Already have an account?{" "}
         <Link href="/login" className="font-medium text-neutral-900 hover:underline">
-          Log in
+          Sign in
         </Link>
       </p>
     </div>

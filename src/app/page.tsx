@@ -13,9 +13,9 @@ export default async function HomePage() {
       <h1 className="mt-8 text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl">
         Your Career Profile in One Scan
       </h1>
-      <p className="mt-6 text-lg text-neutral-600">
-        Create a digital profile with your photo and resume. Recruiters at career events scan your
-        QR code to view your profile instantly—no business cards needed.
+      <p className="mt-6 text-lg text-neutral-900">
+        Create your professional profile with photo and resume. Recruiters scan your QR code at
+        events to view your profile instantly.
       </p>
       <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:justify-center">
         <Link href="/signup">
@@ -25,7 +25,7 @@ export default async function HomePage() {
         </Link>
         <Link href="/scan">
           <Button variant="secondary" fullWidth className="min-w-[180px]">
-            Scan Others
+            Scan profiles
           </Button>
         </Link>
       </div>

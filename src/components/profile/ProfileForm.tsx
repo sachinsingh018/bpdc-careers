@@ -21,9 +21,9 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
             type="submit"
             fullWidth
             isLoading={pending}
-            loadingText={isEditing ? "Saving changes..." : "Creating profile..."}
+            loadingText={isEditing ? "Saving…" : "Creating profile…"}
         >
-            {isEditing ? "Save changes" : "Create profile"}
+            {isEditing ? "Save profile" : "Create profile"}
         </Button>
     );
 }
@@ -31,7 +31,7 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
 function UploadStatus({ show, label }: { show: boolean; label: string }) {
     const { pending } = useFormStatus();
     if (!pending || !show) return null;
-    return <p className="mt-2 text-sm text-neutral-500">Uploading {label.toLowerCase()}…</p>;
+    return <p className="mt-2 text-sm text-neutral-900">Uploading {label.toLowerCase()}…</p>;
 }
 
 export function ProfileForm({ profile }: ProfileFormProps) {
@@ -50,7 +50,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
 
             <section className="space-y-6">
                 <div>
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">Professional identity</h2>
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-900">Professional identity</h2>
                     <p className="mt-1 text-sm text-neutral-500">
                         Introduce yourself as you would to a recruiter meeting you for the first time.
                     </p>
@@ -80,8 +80,8 @@ export function ProfileForm({ profile }: ProfileFormProps) {
 
             <section className="space-y-6">
                 <div>
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">Academic details</h2>
-                    <p className="mt-1 text-sm text-neutral-500">
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-900">Academic details</h2>
+                    <p className="mt-1 text-sm text-neutral-900">
                         Share where you&apos;re studying so recruiters can quickly place your background.
                     </p>
                 </div>
@@ -115,8 +115,8 @@ export function ProfileForm({ profile }: ProfileFormProps) {
 
             <section className="space-y-6">
                 <div>
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">Skills & story</h2>
-                    <p className="mt-1 text-sm text-neutral-500">
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-900">Skills & story</h2>
+                    <p className="mt-1 text-sm text-neutral-900">
                         Highlight what you&apos;re great at and where you want to grow next.
                     </p>
                 </div>
@@ -127,7 +127,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
                     placeholder="Product design, React, Figma, UX research"
                     maxLength={500}
                 />
-                <p className="text-xs text-neutral-400">Separate skills with commas so we can feature them as tags.</p>
+                <p className="text-xs text-neutral-900">Separate skills with commas so we can feature them as tags.</p>
                 <Textarea
                     label="Short bio"
                     name="bio"
@@ -141,41 +141,41 @@ export function ProfileForm({ profile }: ProfileFormProps) {
             <section className="space-y-6">
                 <div>
                     <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">Resume & photo</h2>
-                    <p className="mt-1 text-sm text-neutral-500">
+                    <p className="mt-1 text-sm text-neutral-900">
                         Your photo helps recruiters remember you. Your resume lets them dive deeper after the event.
                     </p>
                 </div>
                 <div>
-                    <label className="mb-1.5 block text-sm font-medium text-neutral-700">Profile photo</label>
-                    <p className="text-xs text-neutral-400">Use a clear, professional headshot. JPG or PNG up to 5 MB.</p>
+                    <label className="mb-1.5 block text-sm font-medium text-neutral-900">Profile photo</label>
+                    <p className="text-xs text-neutral-900">Use a clear, professional headshot. JPG or PNG up to 5 MB.</p>
                     <input
                         type="file"
                         name="photo"
                         accept="image/*"
                         onChange={(event) => setPhotoName(event.target.files?.[0]?.name ?? null)}
-                        className="mt-3 w-full rounded-lg border border-neutral-300 px-4 py-3 text-sm text-neutral-600 file:mr-4 file:rounded file:border-0 file:bg-neutral-100 file:px-4 file:py-2 file:text-sm file:font-medium file:text-neutral-900"
+                        className="mt-3 w-full rounded-lg border border-neutral-300 px-4 py-3 text-sm text-neutral-900 file:mr-4 file:rounded file:border-0 file:bg-neutral-100 file:px-4 file:py-2 file:text-sm file:font-medium file:text-neutral-900"
                     />
                     {photoName ? (
-                        <p className="mt-1 text-sm text-neutral-500">Ready to upload: {photoName}</p>
+                        <p className="mt-1 text-sm text-neutral-900">Ready to upload: {photoName}</p>
                     ) : profile?.photoUrl ? (
-                        <p className="mt-1 text-sm text-neutral-500">Current photo on file. Upload to replace.</p>
+                        <p className="mt-1 text-sm text-neutral-900">Current photo on file. Upload to replace.</p>
                     ) : null}
                     <UploadStatus show={Boolean(photoName)} label="photo" />
                 </div>
                 <div>
-                    <label className="mb-1.5 block text-sm font-medium text-neutral-700">Resume (PDF)</label>
-                    <p className="text-xs text-neutral-400">Upload a PDF so recruiters can review or download it after scanning.</p>
+                    <label className="mb-1.5 block text-sm font-medium text-neutral-900">Resume (PDF)</label>
+                    <p className="text-xs text-neutral-900">Upload a PDF so recruiters can review or download it after scanning.</p>
                     <input
                         type="file"
                         name="resume"
                         accept=".pdf,application/pdf"
                         onChange={(event) => setResumeName(event.target.files?.[0]?.name ?? null)}
-                        className="mt-3 w-full rounded-lg border border-neutral-300 px-4 py-3 text-sm text-neutral-600 file:mr-4 file:rounded file:border-0 file:bg-neutral-100 file:px-4 file:py-2 file:text-sm file:font-medium file:text-neutral-900"
+                        className="mt-3 w-full rounded-lg border border-neutral-300 px-4 py-3 text-sm text-neutral-900 file:mr-4 file:rounded file:border-0 file:bg-neutral-100 file:px-4 file:py-2 file:text-sm file:font-medium file:text-neutral-900"
                     />
                     {resumeName ? (
-                        <p className="mt-1 text-sm text-neutral-500">Ready to upload: {resumeName}</p>
+                        <p className="mt-1 text-sm text-neutral-900">Ready to upload: {resumeName}</p>
                     ) : profile?.resumeUrl ? (
-                        <p className="mt-1 text-sm text-neutral-500">Current resume on file. Upload to replace.</p>
+                        <p className="mt-1 text-sm text-neutral-900">Current resume on file. Upload to replace.</p>
                     ) : null}
                     <UploadStatus show={Boolean(resumeName)} label="resume" />
                 </div>

@@ -16,7 +16,7 @@ export function QRCodeDisplay({ url, name = "", size = 240, compact }: QRCodeDis
       {!compact && (
         <>
           {name && <p className="mt-4 text-base font-medium text-neutral-900">{name}</p>}
-          <p className="mt-1 text-sm text-neutral-500">Scan to view profile</p>
+          <p className="mt-1 text-sm text-neutral-900">Scan to view profile</p>
         </>
       )}
     </div>

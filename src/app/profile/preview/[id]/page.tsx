@@ -14,7 +14,7 @@ export default async function ProfilePreviewPage({
 
   return (
     <div className="mx-auto max-w-lg px-4 py-8">
-      <p className="mb-6 text-center text-sm text-neutral-500">
+      <p className="mb-6 text-center text-sm text-neutral-900">
         This is how recruiters will see your profile
       </p>
       <ProfileView profile={profile} />

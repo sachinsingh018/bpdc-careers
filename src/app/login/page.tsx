@@ -43,8 +43,8 @@ export default function LoginPage() {
 
   return (
     <div className="mx-auto max-w-md px-4 py-12">
-      <h1 className="text-2xl font-semibold text-neutral-900">Log in</h1>
-      <p className="mt-2 text-neutral-600">
+      <h1 className="text-2xl font-semibold text-neutral-900">Sign in</h1>
+      <p className="mt-2 text-neutral-900">
         Enter your email to access your career profile.
       </p>
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -61,14 +61,14 @@ export default function LoginPage() {
           required
           autoComplete="email"
         />
-        <Button type="submit" fullWidth isLoading={pending} loadingText="Logging in…">
-          Log in
+        <Button type="submit" fullWidth isLoading={pending} loadingText="Signing in…">
+        Sign in
         </Button>
       </form>
-      <p className="mt-6 text-center text-sm text-neutral-600">
+      <p className="mt-6 text-center text-sm text-neutral-900">
         Don&apos;t have an account?{" "}
         <Link href="/signup" className="font-medium text-neutral-900 hover:underline">
-          Sign up
+          Create account
         </Link>
       </p>
     </div>

@@ -17,7 +17,7 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
   const closeMobile = () => setMobileOpen(false);
 
   const navLink =
-    "block rounded-lg px-4 py-3 text-base font-medium text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-neutral-900";
+    "block rounded-lg px-4 py-3 text-base font-medium text-neutral-900 transition-colors hover:bg-neutral-100 hover:text-neutral-900";
   const navLinkActive = "bg-neutral-100 text-neutral-900";
 
   return (
@@ -35,9 +35,9 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
         <nav className="hidden items-center gap-1 md:flex md:gap-2">
           <Link
             href="/scan"
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-neutral-100 hover:text-neutral-900 ${pathname === "/scan" ? "text-neutral-900" : "text-neutral-600"}`}
+            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-neutral-100 hover:text-neutral-900 ${pathname === "/scan" ? "text-neutral-900" : "text-neutral-900"}`}
           >
-            Scan Others
+            Scan profiles
           </Link>
           {isAuthenticated ? (
             <>
@@ -45,28 +45,28 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
                 <>
                   <Link
                     href="/dashboard"
-                    className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-neutral-100 hover:text-neutral-900 ${pathname === "/dashboard" ? "text-neutral-900" : "text-neutral-600"}`}
+                    className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-neutral-100 hover:text-neutral-900 ${pathname === "/dashboard" ? "text-neutral-900" : "text-neutral-900"}`}
                   >
                     Dashboard
                   </Link>
                   <Link
                     href="/me"
-                    className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-neutral-100 hover:text-neutral-900 ${pathname === "/me" ? "text-neutral-900" : "text-neutral-600"}`}
+                    className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-neutral-100 hover:text-neutral-900 ${pathname === "/me" ? "text-neutral-900" : "text-neutral-900"}`}
                   >
-                    My Card
+                    My profile
                   </Link>
                 </>
               ) : (
                 <Link
                   href="/profile/create"
-                  className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-900"
+                  className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-100 hover:text-neutral-900"
                 >
                   Create Profile
                 </Link>
               )}
               <Link href="/api/auth/signout?callbackUrl=/">
                 <Button variant="ghost" className="text-sm">
-                  Log out
+                  Sign out
                 </Button>
               </Link>
             </>
@@ -74,17 +74,17 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
             <>
               <Link
                 href="/"
-                className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-neutral-100 hover:text-neutral-900 ${pathname === "/" ? "text-neutral-900" : "text-neutral-600"}`}
+                className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-neutral-100 hover:text-neutral-900 ${pathname === "/" ? "text-neutral-900" : "text-neutral-900"}`}
               >
                 Home
               </Link>
               <Link href="/login">
                 <Button variant="ghost" className="text-sm">
-                  Log in
+                  Sign in
                 </Button>
               </Link>
               <Link href="/signup">
-                <Button className="text-sm">Sign up</Button>
+                <Button className="text-sm">Create account</Button>
               </Link>
             </>
           )}
@@ -94,7 +94,7 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
         <button
           type="button"
           onClick={() => setMobileOpen((o) => !o)}
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 md:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-neutral-900 hover:bg-neutral-100 md:hidden"
           aria-expanded={mobileOpen}
           aria-label="Toggle menu"
         >
@@ -128,7 +128,7 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
                 onClick={closeMobile}
                 className={`${navLink} ${pathname === "/scan" ? navLinkActive : ""}`}
               >
-                Scan Others
+                Scan profiles
               </Link>
               {isAuthenticated ? (
                 <>
@@ -146,7 +146,7 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
                         onClick={closeMobile}
                         className={`${navLink} ${pathname === "/me" ? navLinkActive : ""}`}
                       >
-                        My Card
+                        My profile
                       </Link>
                     </>
                   ) : (
@@ -159,7 +159,7 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
                     onClick={closeMobile}
                     className={`${navLink} border-t border-neutral-100 pt-2`}
                   >
-                    Log out
+                    Sign out
                   </Link>
                 </>
               ) : (
@@ -172,10 +172,10 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
                     Home
                   </Link>
                   <Link href="/login" onClick={closeMobile} className={navLink}>
-                    Log in
+                    Sign in
                   </Link>
                   <Link href="/signup" onClick={closeMobile} className={navLink}>
-                    Sign up
+                    Create account
                   </Link>
                 </>
               )}

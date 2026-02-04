@@ -35,7 +35,7 @@ export default async function MePage() {
                 className="h-full w-full object-cover"
               />
             ) : (
-              <span className="flex h-full w-full items-center justify-center text-4xl font-light text-neutral-400">
+              <span className="flex h-full w-full items-center justify-center text-4xl font-light text-neutral-900">
                 {profile.fullName.charAt(0).toUpperCase()}
               </span>
             )}
@@ -52,16 +52,16 @@ export default async function MePage() {
           </div>
 
           {/* Small help text under QR */}
-          <p className="mt-2 text-sm text-neutral-500">Scan to view my profile</p>
+          <p className="mt-2 text-sm text-neutral-900">Scan to view my profile</p>
 
           {/* Buttons row */}
           <div className="mt-10 flex w-full flex-col gap-3">
             <Link href={`/p/${profile.id}`} target="_blank" rel="noopener noreferrer">
-              <Button fullWidth>Preview Public Profile</Button>
+              <Button fullWidth>View public profile</Button>
             </Link>
             <Link href="/dashboard">
               <Button variant="secondary" fullWidth>
-                Edit Profile
+                Edit profile
               </Button>
             </Link>
           </div>

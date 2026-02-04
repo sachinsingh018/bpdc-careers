@@ -22,7 +22,7 @@ export function Button({
   const variants = {
     primary: "bg-neutral-900 text-white hover:bg-neutral-800 focus:ring-neutral-900",
     secondary: "bg-neutral-100 text-neutral-900 hover:bg-neutral-200 focus:ring-neutral-500 border border-neutral-200",
-    ghost: "text-neutral-600 hover:bg-neutral-100 focus:ring-neutral-500",
+    ghost: "text-neutral-900 hover:bg-neutral-100 focus:ring-neutral-500",
   };
   const isDisabled = disabled || isLoading;
   const spinner = (

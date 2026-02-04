@@ -27,7 +27,7 @@ export function ProfileView({ profile }: ProfileViewProps) {
             className="h-full w-full object-cover"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-6xl font-light text-neutral-300">
+          <div className="flex h-full items-center justify-center text-6xl font-light text-neutral-900">
             {profile.fullName.charAt(0).toUpperCase()}
           </div>
         )}
@@ -35,26 +35,26 @@ export function ProfileView({ profile }: ProfileViewProps) {
 
       <div className="p-6 sm:p-8">
         <h1 className="text-2xl font-semibold text-neutral-900">{profile.fullName}</h1>
-        <p className="mt-1 text-neutral-600">{profile.degree}</p>
+        <p className="mt-1 text-neutral-900">{profile.degree}</p>
         {profile.university && (
-          <p className="text-neutral-500">{profile.university}</p>
+          <p className="text-neutral-900">{profile.university}</p>
         )}
         {profile.graduationYear && (
-          <p className="text-sm text-neutral-500">Class of {profile.graduationYear}</p>
+          <p className="text-sm text-neutral-900">Class of {profile.graduationYear}</p>
         )}
 
         {profile.bio && (
-          <p className="mt-6 text-base leading-relaxed text-neutral-700">{profile.bio}</p>
+          <p className="mt-6 text-base leading-relaxed text-neutral-900">{profile.bio}</p>
         )}
 
         {profile.skills.length > 0 && (
           <div className="mt-6">
-            <h2 className="text-sm font-medium text-neutral-500">Skills</h2>
+            <h2 className="text-sm font-medium text-neutral-900">Skills</h2>
             <div className="mt-2 flex flex-wrap gap-2">
               {profile.skills.map((skill) => (
                 <span
                   key={skill}
-                  className="rounded-full bg-neutral-100 px-3 py-1 text-sm text-neutral-700"
+                  className="rounded-full bg-neutral-100 px-3 py-1 text-sm text-neutral-900"
                 >
                   {skill}
                 </span>

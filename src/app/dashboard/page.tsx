@@ -54,14 +54,14 @@ export default async function DashboardPage({
                                 className="h-full w-full object-cover"
                             />
                         ) : (
-                            <span className="flex h-full w-full items-center justify-center text-3xl font-medium text-neutral-400">
+                            <span className="flex h-full w-full items-center justify-center text-3xl font-medium text-neutral-900">
                                 {profile.fullName.charAt(0).toUpperCase()}
                             </span>
                         )}
                     </div>
                     <h1 className="mt-4 text-xl font-semibold text-neutral-900">{profile.fullName}</h1>
                     {profile.degree && (
-                        <p className="mt-1 text-sm text-neutral-500">{profile.degree}</p>
+                        <p className="mt-1 text-sm text-neutral-900">{profile.degree}</p>
                     )}
                     {resumeUrl && (
                         <a
@@ -82,29 +82,29 @@ export default async function DashboardPage({
                 {/* Quick actions */}
                 <div className="mt-10 flex flex-wrap justify-center gap-3">
                     <Link href="/me">
-                        <Button variant="secondary">My Card</Button>
+                        <Button variant="secondary">My profile</Button>
                     </Link>
                     <Link href="/scan">
-                        <Button variant="secondary">Scan Others</Button>
+                        <Button variant="secondary">Scan profiles</Button>
                     </Link>
                 </div>
             </div>
 
             {/* QR preview */}
             <div className="mt-8 rounded-2xl border border-neutral-100 bg-neutral-50/50 p-6">
-                <p className="text-center text-sm font-medium text-neutral-600">Your QR code</p>
+                <p className="text-center text-sm font-medium text-neutral-900">Your QR code</p>
                 <div className="mt-4 flex justify-center">
                     <QRCodeDisplay url={profileUrl} name={profile.fullName} size={140} />
                 </div>
-                <p className="mt-3 text-center text-xs text-neutral-500">
+                <p className="mt-3 text-center text-xs text-neutral-900">
                     Recruiters scan this to view your full profile
                 </p>
             </div>
 
             {/* Edit profile form */}
             <div className="mt-10 rounded-2xl border border-neutral-100 bg-white p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)]">
-                <h2 className="text-lg font-semibold text-neutral-900">Edit your profile</h2>
-                <p className="mt-1 text-sm text-neutral-600">
+                <h2 className="text-lg font-semibold text-neutral-900">Edit profile</h2>
+                <p className="mt-1 text-sm text-neutral-900">
                     Update your details below. Changes will appear when recruiters scan your QR code.
                 </p>
                 <ProfileForm profile={profile} />
