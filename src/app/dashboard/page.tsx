@@ -4,6 +4,7 @@ import { requireProfile } from "@/lib/guards";
 import { Button } from "@/components/ui/Button";
 import { QRCodeDisplay } from "@/components/dashboard/QRCodeDisplay";
 import { ProfileForm } from "@/components/profile/ProfileForm";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 function getBaseUrl() {
     if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;
@@ -34,6 +35,7 @@ export default async function DashboardPage({
 
     return (
         <div className="mx-auto max-w-2xl px-4 py-10">
+            <ScrollToTop />
             {showSuccess && (
                 <p className="mb-8 rounded-xl bg-emerald-50 px-4 py-3 text-center text-sm text-emerald-800">
                     Your profile is ready. Share your QR code with recruiters at events.
