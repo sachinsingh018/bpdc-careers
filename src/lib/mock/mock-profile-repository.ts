@@ -1,13 +1,13 @@
 /**
  * Mock Profile Repository
- * In-memory storage for MVP
+ * File-backed storage so data survives dev server restarts
  * TODO: Replace with Amazon RDS implementation - use ProfileRepository interface
  */
 import type { Profile } from "@/lib/domain/profile";
 import type { ProfileRepository } from "@/lib/persistence/profile-repository";
+import { loadProfiles, saveProfiles } from "./mock-store";
 
-const profiles = new Map<string, Profile>();
-const profilesByStudentId = new Map<string, string>();
+let { byId: profiles, byStudentId: profilesByStudentId } = loadProfiles();
 
 export const mockProfileRepository: ProfileRepository = {
   async findById(id: string): Promise<Profile | null> {
@@ -20,10 +20,12 @@ export const mockProfileRepository: ProfileRepository = {
   async save(profile: Profile): Promise<Profile> {
     profiles.set(profile.id, profile);
     profilesByStudentId.set(profile.studentId, profile.id);
+    saveProfiles(profiles, profilesByStudentId);
     return profile;
   },
   async update(profile: Profile): Promise<Profile> {
     profiles.set(profile.id, profile);
+    saveProfiles(profiles, profilesByStudentId);
     return profile;
   },
 };

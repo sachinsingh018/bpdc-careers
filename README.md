@@ -38,45 +38,30 @@ src/
 │   └── auth/               # Session management
 ```
 
-## AWS Integration (TODO)
+## Database (Neon PostgreSQL)
 
-The app uses interfaces for persistence and file storage. Replace mock implementations with:
+The app uses Neon for persistence. Set `DATABASE_URL` to enable; otherwise it falls back to an in-memory mock.
 
-- **Profiles & Users**: Implement `ProfileRepository` and `UserRepository` with Amazon RDS
-- **Photos & Resumes**: Implement `FileStorage` with Amazon S3
+**Setup:**
+
+1. Create the `careers` database in Neon (if not exists):
+   ```bash
+   psql 'postgresql://user:password@host/neondb?sslmode=require' -f scripts/create-careers-db.sql
+   ```
+
+2. Run the schema against `careers`:
+   ```bash
+   psql 'postgresql://user:password@host/careers?sslmode=require' -f scripts/schema.sql
+   ```
+
+3. Add to `.env.local`:
+   ```bash
+   DATABASE_URL=postgresql://user:password@host/careers?sslmode=require
+   ```
 
 ## Environment
 
-```bash
-# QR codes (production)
-NEXT_PUBLIC_APP_URL=https://yourdomain.com
+See `.env.example`. Key variables:
 
-# Amazon RDS (optional - falls back to in-memory mock if unset)
-DATABASE_HOST=database-1.cluster-xxx.us-east-1.rds.amazonaws.com
-DATABASE_PORT=3306
-DATABASE_USER=admin
-DATABASE_PASSWORD=your_password
-DATABASE_NAME=bpdc
-DATABASE_SSL_CA=/certs/global-bundle.pem   # or ./certs/global-bundle.pem for local
-```
-
-**Schema setup:** Run `scripts/schema.sql` against your RDS instance to create tables.
-
-**Password from Secrets Manager:**
-```bash
-export DATABASE_PASSWORD=$(aws secretsmanager get-secret-value --secret-id 'arn:aws:secretsmanager:us-east-1:937590957308:secret:rds!cluster-8dbff0be-67d2-436f-9fa5-217fe60649fd-voUV6P' --query SecretString --output text | jq -r '.password')
-```
-
-**S3 (optional - falls back to in-memory base64 if unset):**
-```bash
-AWS_ACCESS_KEY_ID=your_access_key
-AWS_SECRET_ACCESS_KEY=your_secret_key
-AWS_REGION=eu-north-1
-AWS_DEFAULT_REGION=eu-north-1
-S3_BUCKET_NAME=bits-career-event
-```
-
-**SSL:** Download the RDS CA bundle for SSL:
-```bash
-mkdir -p certs && curl -o certs/global-bundle.pem https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
-```
+- `DATABASE_URL` – Neon PostgreSQL connection string (use `careers` database)
+- `NEXT_PUBLIC_APP_URL` – For QR codes in production

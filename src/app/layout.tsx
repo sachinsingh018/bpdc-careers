@@ -2,12 +2,15 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
+import { SessionProvider } from "@/components/providers/SessionProvider";
 import { getAuthContext } from "@/lib/guards";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
@@ -50,8 +53,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans antialiased bg-white text-neutral-900`}>
-        <Header isAuthenticated={!!studentId} hasProfile={hasProfile} />
-        <main className="min-h-[calc(100vh-4rem)] animate-page-fade">{children}</main>
+        <SessionProvider>
+          <Header isAuthenticated={!!studentId} hasProfile={hasProfile} />
+          <main className="min-h-[calc(100vh-4rem)] animate-page-fade">{children}</main>
+        </SessionProvider>
       </body>
     </html>
   );

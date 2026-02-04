@@ -1,6 +1,5 @@
 /**
- * RDS Profile Repository
- * Implements ProfileRepository using Amazon RDS (MySQL/Aurora)
+ * Profile Repository - Neon (PostgreSQL)
  */
 import { query } from "@/lib/db/connection";
 import type { Profile } from "@/lib/domain/profile";
@@ -43,19 +42,19 @@ function rowToProfile(row: ProfileRow): Profile {
 
 export const rdsProfileRepository: ProfileRepository = {
   async findById(id: string): Promise<Profile | null> {
-    const rows = await query<ProfileRow[]>("SELECT * FROM profiles WHERE id = ?", [id]);
+    const rows = await query<ProfileRow[]>("SELECT * FROM profiles WHERE id = $1", [id]);
     return rows[0] ? rowToProfile(rows[0]) : null;
   },
 
   async findByStudentId(studentId: string): Promise<Profile | null> {
-    const rows = await query<ProfileRow[]>("SELECT * FROM profiles WHERE student_id = ?", [studentId]);
+    const rows = await query<ProfileRow[]>("SELECT * FROM profiles WHERE student_id = $1", [studentId]);
     return rows[0] ? rowToProfile(rows[0]) : null;
   },
 
   async save(profile: Profile): Promise<Profile> {
     await query(
       `INSERT INTO profiles (id, student_id, full_name, email, university, degree, graduation_year, skills, bio, photo_url, resume_url, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
       [
         profile.id,
         profile.studentId,
@@ -77,7 +76,7 @@ export const rdsProfileRepository: ProfileRepository = {
 
   async update(profile: Profile): Promise<Profile> {
     await query(
-      `UPDATE profiles SET full_name=?, email=?, university=?, degree=?, graduation_year=?, skills=?, bio=?, photo_url=?, resume_url=?, updated_at=? WHERE id=?`,
+      `UPDATE profiles SET full_name=$1, email=$2, university=$3, degree=$4, graduation_year=$5, skills=$6, bio=$7, photo_url=$8, resume_url=$9, updated_at=$10 WHERE id=$11`,
       [
         profile.fullName,
         profile.email,

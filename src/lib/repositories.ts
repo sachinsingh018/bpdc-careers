@@ -1,6 +1,5 @@
 /**
- * Repository factory - uses RDS when configured, else mock
- * Set DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD to enable RDS
+ * Repository factory - uses Neon (PostgreSQL) when DATABASE_URL is set, else mock
  */
 import { getPool } from "@/lib/db/connection";
 import { mockUserRepository } from "@/lib/mock/mock-user-repository";

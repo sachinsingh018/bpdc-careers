@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { logout } from "@/app/actions/logout";
 import { Button } from "@/components/ui/Button";
 
 interface HeaderProps {
@@ -74,11 +73,11 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
                   Create Profile
                 </Link>
               )}
-              <form action={logout} className="ml-1">
-                <Button type="submit" variant="ghost" className="text-sm">
+              <Link href="/api/auth/signout?callbackUrl=/">
+                <Button variant="ghost" className="text-sm">
                   Log out
                 </Button>
-              </form>
+              </Link>
             </>
           ) : (
             <>
@@ -164,34 +163,32 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
                       Create Profile
                     </Link>
                   )}
-                  ) : (
-                  <>
-                    <Link
-                      href="/"
-                      onClick={closeMobile}
-                      className={`${navLink} ${pathname === "/" ? navLinkActive : ""}`}
-                    >
-                      Home
-                    </Link>
-                    <Link href="/login" onClick={closeMobile} className={navLink}>
-                      Log in
-                    </Link>
-                    <Link href="/signup" onClick={closeMobile} className={navLink}>
-                      Sign up
-                    </Link>
-                  </>
+                  <Link
+                    href="/api/auth/signout?callbackUrl=/"
+                    onClick={closeMobile}
+                    className={`${navLink} border-t border-neutral-100 pt-2`}
+                  >
+                    Log out
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/"
+                    onClick={closeMobile}
+                    className={`${navLink} ${pathname === "/" ? navLinkActive : ""}`}
+                  >
+                    Home
+                  </Link>
+                  <Link href="/login" onClick={closeMobile} className={navLink}>
+                    Log in
+                  </Link>
+                  <Link href="/signup" onClick={closeMobile} className={navLink}>
+                    Sign up
+                  </Link>
+                </>
               )}
-                  {isAuthenticated && (
-                    <form action={logout} className="border-t border-neutral-100 pt-2">
-                      <button
-                        type="submit"
-                        className={`${navLink} w-full text-left`}
-                      >
-                        Log out
-                      </button>
-                    </form>
-                  )}
-                </div>
+            </div>
           </nav>
         </>
       )}
