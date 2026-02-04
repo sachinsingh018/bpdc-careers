@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import { GlobalErrorReporter } from "@/components/GlobalErrorReporter";
+import { Watermark } from "@/components/Watermark";
 import { getAuthContext } from "@/lib/guards";
 
 const inter = Inter({
@@ -44,10 +45,11 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans antialiased bg-white text-neutral-900`}>
+      <body className={`${inter.variable} relative font-sans antialiased bg-white text-neutral-900`}>
+        <Watermark />
         <SessionProvider>
           <Header isAuthenticated={!!studentId} hasProfile={hasProfile} />
-          <main className="min-h-[calc(100vh-4rem)] animate-page-fade">{children}</main>
+          <main className="relative z-10 min-h-[calc(100vh-4rem)] animate-page-fade">{children}</main>
           <GlobalErrorReporter />
         </SessionProvider>
       </body>
