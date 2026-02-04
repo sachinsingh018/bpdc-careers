@@ -10,8 +10,34 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Career Profile - Connect with Recruiters",
-  description: "Create your digital career profile. Recruiters scan your QR to view your profile instantly.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+  title: "BPDC Career Profile - Your Digital Profile in One Scan",
+  description: "Create your career profile with photo and resume. Recruiters at BPDC events scan your QR code to view your profile instantly.",
+  openGraph: {
+    title: "BPDC Career Profile - Your Digital Profile in One Scan",
+    description: "Create your career profile with photo and resume. Recruiters at BPDC events scan your QR code to view your profile instantly.",
+    url: "/",
+    siteName: "BPDC Career Profile",
+    images: [
+      {
+        url: "/bpdc.jpg",
+        width: 1200,
+        height: 630,
+        alt: "BPDC Career Profile",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BPDC Career Profile - Your Digital Profile in One Scan",
+    description: "Create your career profile with photo and resume. Recruiters scan your QR code to view your profile instantly.",
+    images: ["/bpdc.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default async function RootLayout({
