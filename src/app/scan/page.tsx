@@ -1,8 +1,15 @@
 "use client";
 
+// Minimal test for iOS crash debugging - restore full code below when fixed
+export default function ScanPage() {
+  return <div>Test</div>;
+}
+
+/*
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { ScanErrorBoundary } from "@/components/ScanErrorBoundary";
 
 function normalizeToPath(input: string): string | null {
   const v = input.trim();
@@ -40,6 +47,7 @@ export default function ScanPage() {
   );
 
   return (
+    <ScanErrorBoundary>
     <div className="mx-auto max-w-lg px-4 py-10">
       <h1 className="text-2xl font-semibold text-neutral-900">Scan a student&apos;s QR code</h1>
       <p className="mt-2 text-neutral-600">
@@ -80,5 +88,7 @@ export default function ScanPage() {
         </div>
       </div>
     </div>
+    </ScanErrorBoundary>
   );
 }
+*/
