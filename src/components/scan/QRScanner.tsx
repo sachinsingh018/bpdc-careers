@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 
 interface QRScannerProps {
@@ -11,6 +11,7 @@ interface QRScannerProps {
 
 export function QRScanner({ onError, onStop, onDetected }: QRScannerProps) {
   const scannerRef = useRef<Html5Qrcode | null>(null);
+  const [isStarting, setIsStarting] = useState(true);
 
   const stopScanning = useCallback(async () => {
     if (scannerRef.current) {
@@ -21,17 +22,32 @@ export function QRScanner({ onError, onStop, onDetected }: QRScannerProps) {
       }
       scannerRef.current = null;
     }
+    setIsStarting(false);
     onStop?.();
   }, [onStop]);
 
   const startScanning = useCallback(async () => {
+    const element = document.getElementById("qr-reader");
+    if (!element) {
+      onError?.("Scanner could not initialize. Please try again.");
+      return;
+    }
+
     try {
       const html5QrCode = new Html5Qrcode("qr-reader");
       scannerRef.current = html5QrCode;
 
+      const qrboxSize = Math.min(280, Math.min(window.innerWidth - 32, window.innerHeight * 0.4));
+      const config = {
+        fps: 8,
+        qrbox: { width: qrboxSize, height: qrboxSize },
+        aspectRatio: 1,
+        disableFlip: false,
+      };
+
       await html5QrCode.start(
         { facingMode: "environment" },
-        { fps: 10, qrbox: { width: 220, height: 220 } },
+        config,
         async (decodedText) => {
           await stopScanning();
           let path = decodedText;
@@ -48,14 +64,26 @@ export function QRScanner({ onError, onStop, onDetected }: QRScannerProps) {
         },
         () => { }
       );
+      setIsStarting(false);
     } catch (err) {
-      onError?.("Could not access camera. Please allow camera access and try again.");
+      const message = err instanceof Error ? err.message : String(err);
+      if (message.includes("NotAllowedError") || message.includes("Permission")) {
+        onError?.("Camera access was denied. Please allow camera access in your browser settings and try again.");
+      } else if (message.includes("NotFoundError") || message.includes("not found")) {
+        onError?.("No camera found. Please use a device with a camera.");
+      } else if (message.includes("NotReadableError") || message.includes("in use")) {
+        onError?.("Camera is in use by another app. Please close other apps using the camera.");
+      } else {
+        onError?.("Could not access camera. Please ensure you're on HTTPS and allow camera access.");
+      }
+      setIsStarting(false);
     }
   }, [onDetected, onError, stopScanning]);
 
   useEffect(() => {
-    startScanning();
+    const timer = setTimeout(() => startScanning(), 100);
     return () => {
+      clearTimeout(timer);
       if (scannerRef.current) {
         scannerRef.current.stop().catch(() => { });
       }
@@ -66,9 +94,13 @@ export function QRScanner({ onError, onStop, onDetected }: QRScannerProps) {
     <div className="space-y-4">
       <div
         id="qr-reader"
-        className="overflow-hidden rounded-2xl border border-neutral-900/10 bg-black shadow-inner"
+        className="min-h-[240px] overflow-hidden rounded-2xl border border-neutral-900/10 bg-black shadow-inner"
+        style={{ minHeight: "min(280px, 70vw)" }}
         aria-label="Camera view finder"
       />
+      {isStarting && (
+        <p className="text-center text-sm text-neutral-500">Starting camera…</p>
+      )}
       <button
         type="button"
         onClick={stopScanning}

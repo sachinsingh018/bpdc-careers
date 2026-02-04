@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { ScanErrorBoundary } from "@/components/ScanErrorBoundary";
 
 const QRScanner = dynamic(() => import("@/components/scan/QRScanner").then((m) => ({ default: m.QRScanner })), {
     ssr: false,
@@ -86,21 +87,28 @@ export default function ScanPage() {
                 ) : null}
 
                 {started && !pendingPath ? (
-                    <div className="space-y-6">
-                        <QRScanner
-                            onError={(message) => {
-                                setError(message);
-                                setStatusMessage(null);
-                                setPendingPath(null);
-                                setStarted(false);
-                            }}
-                            onStop={() => setStarted(false)}
-                            onDetected={handleDetected}
-                        />
-                        <p className="text-center text-sm text-neutral-500">
-                            Align the QR code inside the square. We&apos;ll open the profile as soon as it&apos;s detected.
-                        </p>
-                    </div>
+                    <ScanErrorBoundary
+                        onReset={() => {
+                            setError(null);
+                            setStarted(false);
+                        }}
+                    >
+                        <div className="space-y-6">
+                            <QRScanner
+                                onError={(message) => {
+                                    setError(message);
+                                    setStatusMessage(null);
+                                    setPendingPath(null);
+                                    setStarted(false);
+                                }}
+                                onStop={() => setStarted(false)}
+                                onDetected={handleDetected}
+                            />
+                            <p className="text-center text-sm text-neutral-500">
+                                Align the QR code inside the square. We&apos;ll open the profile as soon as it&apos;s detected.
+                            </p>
+                        </div>
+                    </ScanErrorBoundary>
                 ) : null}
 
                 {pendingPath ? (
