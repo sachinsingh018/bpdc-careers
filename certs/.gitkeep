@@ -1,0 +1,2 @@
+# Place global-bundle.pem here for local SSL connections to RDS
+# Download: curl -o global-bundle.pem https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
