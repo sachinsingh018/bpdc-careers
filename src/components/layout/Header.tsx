@@ -28,8 +28,7 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
           className="flex min-w-0 items-center gap-2"
           onClick={closeMobile}
         >
-          <span className="text-xl font-bold text-neutral-900 sm:text-2xl">BPDC</span>
-          <span className="hidden truncate text-base font-medium text-neutral-900 md:inline">Career Profile</span>
+          <span className="text-xl font-bold text-neutral-900 sm:text-2xl">Career Profile</span>
         </Link>
 
         {/* Desktop nav */}
