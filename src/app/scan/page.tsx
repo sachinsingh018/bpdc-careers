@@ -1,32 +1,30 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
-
-const QRScanner = dynamic(
-  () => import("@/components/scan/QRScanner").then((m) => ({ default: m.QRScanner })),
-  { ssr: false }
-);
+import { QRScanner, type QRScannerHandle } from "@/components/scan/QRScanner";
 
 export default function ScanPage() {
   const router = useRouter();
+  const scannerRef = useRef<QRScannerHandle>(null);
 
-  const [scannerMounted, setScannerMounted] = useState(false);
   const [status, setStatus] = useState<"idle" | "preparing" | "scanning" | "opening" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
   const [pendingPath, setPendingPath] = useState<string | null>(null);
 
   const startScanner = useCallback(() => {
-    if (scannerMounted) return;
     setError(null);
     setStatus("preparing");
-    setScannerMounted(true);
-  }, [scannerMounted]);
+    scannerRef.current?.start();
+  }, []);
+
+  const stopScanner = useCallback(() => {
+    scannerRef.current?.stop();
+    setStatus("idle");
+  }, []);
 
   const onDetected = useCallback((path: string) => {
-    setScannerMounted(false);
     setPendingPath(path);
     setStatus("opening");
   }, []);
@@ -36,11 +34,9 @@ export default function ScanPage() {
   }, []);
 
   const onScannerError = useCallback((msg: string) => {
-    setScannerMounted(false);
     setStatus("error");
     setError(
-      msg ||
-      "Camera failed to start. Please allow camera access or use manual entry."
+      msg || "Camera failed to start. Please allow camera access or use manual entry."
     );
   }, []);
 
@@ -48,12 +44,13 @@ export default function ScanPage() {
     setError(null);
     setPendingPath(null);
     setStatus("idle");
-    setScannerMounted(false);
   }, []);
 
   useEffect(() => {
     if (!pendingPath) return;
-    const t = setTimeout(() => router.push(pendingPath), 900);
+    const t = setTimeout(() => {
+      router.push(pendingPath);
+    }, 900);
     return () => clearTimeout(t);
   }, [pendingPath, router]);
 
@@ -102,18 +99,28 @@ export default function ScanPage() {
           </div>
         )}
 
-        {scannerMounted && !pendingPath && (
-          <div className="space-y-6">
-            <QRScanner
-              onDetected={onDetected}
-              onReady={onScannerReady}
-              onError={onScannerError}
-            />
-            <p className="text-center text-sm text-neutral-500">
-              Align the QR code inside the square. We&apos;ll open the profile as soon as it&apos;s detected.
-            </p>
-          </div>
-        )}
+        <div
+          className={
+            status === "preparing" || status === "scanning" ? "space-y-6" : "hidden"
+          }
+        >
+          <QRScanner
+            ref={scannerRef}
+            onDetected={onDetected}
+            onReady={onScannerReady}
+            onError={onScannerError}
+          />
+          <p className="text-center text-sm text-neutral-500">
+            Align the QR code inside the square. We&apos;ll open the profile as soon as it&apos;s detected.
+          </p>
+          <button
+            type="button"
+            onClick={stopScanner}
+            className="w-full rounded-lg border border-neutral-300 px-4 py-3 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+          >
+            Stop camera
+          </button>
+        </div>
 
         {status === "opening" && pendingPath && (
           <div className="flex flex-col items-center gap-3 py-10 text-neutral-600">
