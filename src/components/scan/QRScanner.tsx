@@ -1,7 +1,7 @@
 "use client";
 
 import { Html5Qrcode } from "html5-qrcode";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
   onDetected: (path: string) => void;
@@ -24,10 +24,28 @@ function normalizeToPath(text: string): string | null {
   return `/p/${v}`;
 }
 
+function friendlyPermissionMessage(err: unknown): string {
+  const msg = String(err instanceof Error ? err.message : err).toLowerCase();
+  if (
+    msg.includes("permission") ||
+    msg.includes("notallowed") ||
+    msg.includes("not allowed") ||
+    msg.includes("denied")
+  ) {
+    return "Camera access was denied. Use the form below to enter a profile link manually.";
+  }
+  if (msg.includes("notfound") || msg.includes("no camera")) {
+    return "No camera found. Use the form below to enter a profile link manually.";
+  }
+  return "Camera unavailable. Use the form below to enter a profile link manually.";
+}
+
 const CONTAINER_ID = "qr-reader";
 
 export function QRScanner({ onDetected, onError }: Props) {
   const scannerRef = useRef<Html5Qrcode | null>(null);
+  const startedRef = useRef(false);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     const element = document.getElementById(CONTAINER_ID);
@@ -52,16 +70,41 @@ export function QRScanner({ onDetected, onError }: Props) {
         },
         () => {}
       )
+      .then(() => {
+        startedRef.current = true;
+      })
       .catch((err: unknown) => {
-        const msg = String(err instanceof Error ? err.message : err || "Camera error");
-        onError?.(msg);
+        const friendly = friendlyPermissionMessage(err);
+        setFailed(true);
+        onError?.(friendly);
       });
 
     return () => {
       scannerRef.current = null;
-      scanner.stop().catch(() => {});
+      if (startedRef.current) {
+        scanner.stop().catch(() => {});
+        startedRef.current = false;
+      } else {
+        try {
+          scanner.clear?.();
+        } catch {
+          // ignore
+        }
+      };
     };
   }, [onDetected, onError]);
+
+  if (failed) {
+    return (
+      <div
+        className="flex min-h-[120px] flex-col items-center justify-center rounded-2xl border border-neutral-200 bg-neutral-50 p-6 text-center"
+        role="status"
+      >
+        <p className="text-sm text-neutral-900">Camera not available</p>
+        <p className="mt-1 text-xs text-neutral-600">Use the form below to enter a profile link.</p>
+      </div>
+    );
+  }
 
   return (
     <div

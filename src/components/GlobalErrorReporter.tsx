@@ -11,13 +11,16 @@ export function GlobalErrorReporter() {
 
   useEffect(() => {
     const onError = (e: ErrorEvent) => {
+      if (e.message?.includes("NEXT_REDIRECT") || e.message?.includes("NEXT_NOT_FOUND")) return;
       const msg = `${e.message} (${e.filename}:${e.lineno})`;
       setError(msg);
       return false;
     };
     const onRejection = (e: PromiseRejectionEvent) => {
-      const msg = String(e.reason?.message ?? e.reason ?? "Unhandled rejection");
-      setError(msg);
+      const reason = e.reason;
+      const msg = reason?.message ?? String(reason ?? "");
+      if (msg.includes("NEXT_REDIRECT") || msg.includes("NEXT_NOT_FOUND")) return;
+      setError(String(msg || "Unhandled rejection"));
     };
     window.addEventListener("error", onError);
     window.addEventListener("unhandledrejection", onRejection);
