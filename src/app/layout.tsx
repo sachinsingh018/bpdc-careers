@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import { GlobalErrorReporter } from "@/components/GlobalErrorReporter";
+import { InitialLoader } from "@/components/InitialLoader";
 import { Watermark } from "@/components/Watermark";
 import { getAuthContext } from "@/lib/guards";
 
@@ -46,6 +47,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} relative font-sans antialiased bg-white text-neutral-900`}>
+        <InitialLoader />
         <Watermark />
         <SessionProvider>
           <Header isAuthenticated={!!studentId} hasProfile={hasProfile} />

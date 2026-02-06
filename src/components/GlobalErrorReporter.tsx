@@ -2,14 +2,31 @@
 
 import { useEffect, useState } from "react";
 
+/** Next.js throws these intentionally for redirect/notFound - do not show as errors */
+function isNextRouterSignal(err: unknown): boolean {
+  if (!err || typeof err !== "object") return false;
+  const d = (err as { digest?: string }).digest;
+  const m = (err as Error).message;
+  if (typeof d === "string" && d.startsWith("NEXT_")) return true;
+  if (typeof m === "string" && (m.includes("NEXT_REDIRECT") || m.includes("NEXT_NOT_FOUND"))) return true;
+  return false;
+}
+
 /**
  * Catches unhandled errors and rejections, displays them on screen.
- * Useful for debugging iOS crashes - remove in production once fixed.
+ * Delays attaching listeners so initial redirects (e.g. / -> /dashboard) don't flash an error.
  */
 export function GlobalErrorReporter() {
   const [error, setError] = useState<string | null>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    const t = setTimeout(() => setReady(true), 1500);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    if (!ready) return;
     const onError = (e: ErrorEvent) => {
       if (e.message?.includes("NEXT_REDIRECT") || e.message?.includes("NEXT_NOT_FOUND")) return;
       const msg = `${e.message} (${e.filename}:${e.lineno})`;
@@ -18,8 +35,15 @@ export function GlobalErrorReporter() {
     };
     const onRejection = (e: PromiseRejectionEvent) => {
       const reason = e.reason;
+      if (isNextRouterSignal(reason)) {
+        e.preventDefault();
+        return;
+      }
       const msg = reason?.message ?? String(reason ?? "");
-      if (msg.includes("NEXT_REDIRECT") || msg.includes("NEXT_NOT_FOUND")) return;
+      if (/NEXT_REDIRECT|NEXT_NOT_FOUND/.test(msg)) {
+        e.preventDefault();
+        return;
+      }
       setError(String(msg || "Unhandled rejection"));
     };
     window.addEventListener("error", onError);
@@ -28,7 +52,7 @@ export function GlobalErrorReporter() {
       window.removeEventListener("error", onError);
       window.removeEventListener("unhandledrejection", onRejection);
     };
-  }, []);
+  }, [ready]);
 
   if (!error) return null;
 
