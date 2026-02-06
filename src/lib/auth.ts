@@ -5,15 +5,25 @@ import { userRepository } from "@/lib/repositories";
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Email",
+      name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         const email = credentials?.email?.trim();
-        if (!email) return null;
-        const student = await userRepository.findByEmail(email);
-        return student ? { id: student.id, email: student.email } : null;
+        const password = credentials?.password ?? "";
+        if (!email || !password) return null;
+
+        const student = await userRepository.findByEmailForAuth(email);
+        if (!student) return null;
+        if (!student.passwordHash) {
+          return null; // Legacy user must set password via signup
+        }
+
+        const { compare } = await import("bcryptjs");
+        const valid = await compare(password, student.passwordHash);
+        return valid ? { id: student.id, email: student.email } : null;
       },
     }),
   ],
@@ -33,6 +43,7 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/login",
+    signOut: "/signout",
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

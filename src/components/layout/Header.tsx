@@ -64,7 +64,7 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
                   Create Profile
                 </Link>
               )}
-              <Link href="/api/auth/signout?callbackUrl=/">
+              <Link href="/signout">
                 <Button variant="ghost" className="text-sm">
                   Sign out
                 </Button>
@@ -155,7 +155,7 @@ export function Header({ isAuthenticated, hasProfile }: HeaderProps) {
                     </Link>
                   )}
                   <Link
-                    href="/api/auth/signout?callbackUrl=/"
+                    href="/signout"
                     onClick={closeMobile}
                     className={`${navLink} border-t border-neutral-100 pt-2`}
                   >

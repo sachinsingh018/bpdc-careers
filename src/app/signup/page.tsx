@@ -25,9 +25,11 @@ export default function SignupPage() {
       return;
     }
     const email = formData.get("email")?.toString()?.trim();
-    if (email) {
+    const password = formData.get("password")?.toString();
+    if (email && password) {
       const signInResult = await signIn("credentials", {
         email,
+        password,
         redirect: false,
         callbackUrl: "/profile/create",
       });
@@ -59,6 +61,15 @@ export default function SignupPage() {
           placeholder="you@university.edu"
           required
           autoComplete="email"
+        />
+        <Input
+          label="Password"
+          name="password"
+          type="password"
+          placeholder="At least 8 characters"
+          required
+          minLength={8}
+          autoComplete="new-password"
         />
         <Button type="submit" fullWidth isLoading={pending} loadingText="Creating account…">
           Create account

@@ -54,7 +54,12 @@ The app uses Neon for persistence. Set `DATABASE_URL` to enable; otherwise it fa
    psql 'postgresql://user:password@host/careers?sslmode=require' -f scripts/schema.sql
    ```
 
-3. Add to `.env.local`:
+3. If you have an existing database, run the password migration:
+   ```bash
+   psql $DATABASE_URL -f scripts/add-password-migration.sql
+   ```
+
+4. Add to `.env.local`:
    ```bash
    DATABASE_URL=postgresql://user:password@host/careers?sslmode=require
    ```
@@ -64,4 +69,5 @@ The app uses Neon for persistence. Set `DATABASE_URL` to enable; otherwise it fa
 See `.env.example`. Key variables:
 
 - `DATABASE_URL` – Neon PostgreSQL connection string (use `careers` database)
+- Auth uses email + password (bcrypt). New signups require a password; existing users without one can set it by signing up again with the same email.
 - `NEXT_PUBLIC_APP_URL` – For QR codes in production

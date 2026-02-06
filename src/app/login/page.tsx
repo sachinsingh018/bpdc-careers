@@ -18,18 +18,20 @@ export default function LoginPage() {
     setPending(true);
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email")?.toString()?.trim();
-    if (!email) {
-      setError("Email is required");
+    const password = formData.get("password")?.toString();
+    if (!email || !password) {
+      setError("Email and password are required");
       setPending(false);
       return;
     }
     const result = await signIn("credentials", {
       email,
+      password,
       redirect: false,
       callbackUrl: "/dashboard",
     });
     if (result?.error) {
-      setError("No account found with this email. Please sign up first.");
+      setError("Invalid email or password. Please try again.");
       setPending(false);
       return;
     }
@@ -45,7 +47,7 @@ export default function LoginPage() {
     <div className="mx-auto max-w-md px-4 py-12">
       <h1 className="text-2xl font-semibold text-neutral-900">Sign in</h1>
       <p className="mt-2 text-neutral-900">
-        Enter your email to access your career profile.
+        Enter your email and password to access your career profile.
       </p>
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
         {error && (
@@ -60,6 +62,14 @@ export default function LoginPage() {
           placeholder="you@university.edu"
           required
           autoComplete="email"
+        />
+        <Input
+          label="Password"
+          name="password"
+          type="password"
+          placeholder="Your password"
+          required
+          autoComplete="current-password"
         />
         <Button type="submit" fullWidth isLoading={pending} loadingText="Signing in…">
         Sign in
